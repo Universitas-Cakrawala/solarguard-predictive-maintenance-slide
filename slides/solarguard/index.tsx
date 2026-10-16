@@ -132,11 +132,155 @@ const ModelReplay = () => {
   const [ratio, setRatio] = useState<number | null>(null);
   const [minutes, setMinutes] = useState(15);
   const c = replayCases[plant];
-  const values = c.rows.map(r => ({ ...r, actual: ratio === null ? r.actual : r.predicted * ratio / 100 }));
+  const isModified = ratio !== null || minutes !== 15;
+
+  const handleReset = () => {
+    setRatio(null);
+    setMinutes(15);
+  };
+
+  const values = c.rows.map(r => ({ ...r, actual: ratio === null ? r.actual : (r.predicted * ratio) / 100 }));
   const qualifies = (r: { actual: number; predicted: number }) => r.predicted >= c.minimum && r.predicted - r.actual > c.threshold;
   const episode = values.every(qualifies);
-  const controls = <div className="solar-controls" style={{ display: 'flex', gap: 10, marginBottom: 22 }}><Choice active={plant === 'p1'} onClick={() => { setPlant('p1'); setRatio(null); }}>Plant 1</Choice><Choice active={plant === 'p2'} onClick={() => { setPlant('p2'); setRatio(null); }}>Plant 2</Choice><Choice active={ratio === null} onClick={() => setRatio(null)}>Reset data asli</Choice></div>;
-  return <><style>{motionStyles}</style><div className="solar-screen">{controls}<div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 64 }}><div><Text size={26}>{c.plant} · 14 Juni 2020 · inverter {c.inverter}</Text><table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 29, borderTop: `2px solid ${line}`, borderBottom: `2px solid ${line}` }}><thead style={{ color: muted, fontSize: 24 }}><tr><th>Waktu</th><th>Prediksi RF</th><th>Aktual {ratio === null ? 'asli' : 'simulasi'}</th><th>Gap</th></tr></thead><tbody><ReplayRow {...values[0]} qualifies={qualifies(values[0])} /><ReplayRow {...values[1]} qualifies={qualifies(values[1])} /><ReplayRow {...values[2]} qualifies={qualifies(values[2])} /></tbody></table><div aria-live="polite" style={{ marginTop: 24, padding: 22, background: episode ? '#F2E7DB' : '#E7F0E8', color: episode ? red : blue, fontSize: 32, fontWeight: 700 }}>{episode ? 'Prioritas tinjauan: 3 interval memenuhi aturan' : 'Belum memenuhi 3 interval berturut-turut'}</div><Text size={24}>Gap harus &gt; {fmt(c.threshold)}; prediksi ≥ {fmt(c.minimum)}. Tiga observasi 15 menit membentang 30 menit.</Text></div><div><label style={{ display: 'block', fontSize: 28, lineHeight: 1.4 }} htmlFor="solar-output">Skenario aktual / prediksi: {ratio === null ? 'data asli' : `${ratio}%`}</label><input className="solar-controls" id="solar-output" aria-label="Persentase output aktual simulasi" type="range" min="0" max="110" step="1" value={ratio ?? 0} onChange={e => setRatio(Number(e.target.value))} style={{ width: '100%', margin: '20px 0', accentColor: blue }} /><Text size={24}>Geser untuk mengganti aktual pada ketiga interval. Cuaca dan prediksi RF tetap. Ini simulasi aturan, tanpa inferensi ulang model.</Text><label htmlFor="solar-minutes" style={{ display: 'block', fontSize: 28 }}>Asumsi tinjauan: {minutes} menit/episode</label><input className="solar-controls" id="solar-minutes" aria-label="Menit tinjauan per episode" type="range" min="5" max="60" step="5" value={minutes} onChange={e => setMinutes(Number(e.target.value))} style={{ width: '100%', margin: '20px 0', accentColor: amber }} /><div aria-live="polite" style={{ fontSize: 38, fontWeight: 700, color: blue }}>{c.episodes} episode × {minutes} menit = {c.episodes * minutes} menit</div><Text size={24}>Ilustrasi kapasitas berdasarkan beban test 7 hari, bukan perkiraan biaya inspeksi atau ROI. Jumlah episode ini tetap, bukan dihitung ulang dari slider output.</Text></div></div></div><div className="solar-print" style={{ gridTemplateColumns: '1fr 1fr', gap: 64 }}><div><Text color="#12352B">Replay Plant 1 · 14 Juni 2020</Text><Text size={30}>11:00 / 11:15 / 11:30<br />Prediksi: 8.707,5 / 8.881,1 / 8.811,4<br />Aktual: 2.155,4 / 0 / 0</Text><Text size={28}>Ketiga gap melampaui ambang 1.577,0. Prediksi memenuhi batas minimum 2.208,4. Hasil: prioritas tinjauan.</Text></div><div><Text color="#12352B">Ilustrasi kapasitas tinjauan</Text><Text size={30}>Asumsi 15 menit/episode:<br />Plant 1: 3 × 15 = 45 menit<br />Plant 2: 10 × 15 = 150 menit</Text><Text size={28}>Beban 7 hari test, belum termasuk inspeksi. Simulasi output mengubah aktual, sementara prediksi RF tetap.</Text></div></div><div style={{ marginTop: 22, borderTop: `1px solid ${line}`, paddingTop: 18 }}><Text size={24}>Batas: 34 hari, dua plant dikenal, horizon 0. Alert membutuhkan operator dan log inspeksi. Sensitivitas, alarm palsu, biaya, dan ROI belum terukur.</Text></div></>;
+
+  const controls = (
+    <div className="solar-controls" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
+      <div style={{ display: 'flex', gap: 10 }}>
+        <Choice active={plant === 'p1'} onClick={() => { setPlant('p1'); setRatio(null); }}>Plant 1</Choice>
+        <Choice active={plant === 'p2'} onClick={() => { setPlant('p2'); setRatio(null); }}>Plant 2</Choice>
+      </div>
+      <button
+        type="button"
+        className="solar-control"
+        onClick={e => {
+          e.stopPropagation();
+          handleReset();
+        }}
+        onKeyDown={e => {
+          if ([' ', 'Enter'].includes(e.key)) {
+            e.stopPropagation();
+            handleReset();
+          }
+        }}
+        aria-label="Kembalikan simulasi ke data observasi asli"
+        style={{
+          fontFamily: 'inherit',
+          fontSize: 22,
+          fontWeight: 700,
+          padding: '12px 22px',
+          border: `1px solid ${isModified ? amber : line}`,
+          background: isModified ? '#FFF9EF' : '#FFFFFF',
+          color: isModified ? amber : muted,
+          cursor: isModified ? 'pointer' : 'default',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          transition: 'all 180ms ease',
+        }}
+      >
+        <span>↺</span>
+        <span>Reset data asli</span>
+        {isModified && (
+          <span style={{ fontSize: 16, background: amber, color: '#FFFFFF', padding: '2px 8px', borderRadius: 4, marginLeft: 4 }}>
+            Simulasi aktif
+          </span>
+        )}
+      </button>
+    </div>
+  );
+
+  return (
+    <>
+      <style>{motionStyles}</style>
+      <div className="solar-screen">
+        {controls}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 64 }}>
+          <div key={plant} className="solar-detail">
+            <Text size={26}>{c.plant} · 14 Juni 2020 · inverter {c.inverter}</Text>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 29, borderTop: `2px solid ${line}`, borderBottom: `2px solid ${line}` }}>
+              <thead style={{ color: muted, fontSize: 24 }}>
+                <tr>
+                  <th>Waktu</th>
+                  <th>Prediksi RF</th>
+                  <th>Aktual {ratio === null ? '(asli)' : `(${ratio}%)`}</th>
+                  <th>Gap</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ReplayRow {...values[0]} qualifies={qualifies(values[0])} />
+                <ReplayRow {...values[1]} qualifies={qualifies(values[1])} />
+                <ReplayRow {...values[2]} qualifies={qualifies(values[2])} />
+              </tbody>
+            </table>
+            <div aria-live="polite" style={{ marginTop: 24, padding: 22, background: episode ? '#F2E7DB' : '#E7F0E8', color: episode ? red : blue, fontSize: 32, fontWeight: 700 }}>
+              {episode ? 'Prioritas tinjauan: 3 interval memenuhi aturan' : 'Belum memenuhi 3 interval berturut-turut'}
+            </div>
+            <Text size={24}>Gap harus &gt; {fmt(c.threshold)}; prediksi ≥ {fmt(c.minimum)}. Tiga observasi 15 menit membentang 30 menit.</Text>
+          </div>
+          <div>
+            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: 28, lineHeight: 1.4 }} htmlFor="solar-output">
+              <span>Skenario aktual / prediksi:</span>
+              <strong style={{ color: ratio === null ? blue : amber, fontSize: 30 }}>
+                {ratio === null ? 'Data asli' : `${ratio}%`}
+              </strong>
+            </label>
+            <input
+              className="solar-controls"
+              id="solar-output"
+              aria-label="Persentase output aktual simulasi"
+              type="range"
+              min="0"
+              max="110"
+              step="1"
+              value={ratio ?? (plant === 'p1' ? 25 : 0)}
+              onChange={e => setRatio(Number(e.target.value))}
+              style={{ width: '100%', margin: '18px 0 12px', accentColor: blue }}
+            />
+            <Text size={24}>
+              {ratio === null
+                ? 'Menampilkan data observasi asli dari test_alert_predictions.csv. Geser slider untuk menyimulasikan output.'
+                : 'Geser untuk mengganti aktual pada ketiga interval. Cuaca dan prediksi RF tetap. Ini simulasi aturan, tanpa inferensi ulang model.'}
+            </Text>
+            <label htmlFor="solar-minutes" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: 28, marginTop: 12 }}>
+              <span>Asumsi tinjauan:</span>
+              <strong style={{ color: minutes !== 15 ? amber : '#12352B', fontSize: 30 }}>{minutes} menit/episode</strong>
+            </label>
+            <input
+              className="solar-controls"
+              id="solar-minutes"
+              aria-label="Menit tinjauan per episode"
+              type="range"
+              min="5"
+              max="60"
+              step="5"
+              value={minutes}
+              onChange={e => setMinutes(Number(e.target.value))}
+              style={{ width: '100%', margin: '18px 0 12px', accentColor: amber }}
+            />
+            <div aria-live="polite" style={{ fontSize: 38, fontWeight: 700, color: blue }}>
+              {c.episodes} episode × {minutes} menit = {c.episodes * minutes} menit
+            </div>
+            <Text size={24}>Ilustrasi kapasitas berdasarkan beban test 7 hari, bukan perkiraan biaya inspeksi atau ROI. Jumlah episode ini tetap, bukan dihitung ulang dari slider output.</Text>
+          </div>
+        </div>
+      </div>
+      <div className="solar-print" style={{ gridTemplateColumns: '1fr 1fr', gap: 64 }}>
+        <div>
+          <Text color="#12352B">Replay Plant 1 · 14 Juni 2020</Text>
+          <Text size={30}>11:00 / 11:15 / 11:30<br />Prediksi: 8.707,5 / 8.881,1 / 8.811,4<br />Aktual: 2.155,4 / 0 / 0</Text>
+          <Text size={28}>Ketiga gap melampaui ambang 1.577,0. Prediksi memenuhi batas minimum 2.208,4. Hasil: prioritas tinjauan.</Text>
+        </div>
+        <div>
+          <Text color="#12352B">Ilustrasi kapasitas tinjauan</Text>
+          <Text size={30}>Asumsi 15 menit/episode:<br />Plant 1: 3 × 15 = 45 menit<br />Plant 2: 10 × 15 = 150 menit</Text>
+          <Text size={28}>Beban 7 hari test, belum termasuk inspeksi. Simulasi output mengubah aktual, sementara prediksi RF tetap.</Text>
+        </div>
+      </div>
+      <div style={{ marginTop: 22, borderTop: `1px solid ${line}`, paddingTop: 18 }}>
+        <Text size={24}>Batas: 34 hari, dua plant dikenal, horizon 0. Alert membutuhkan operator dan log inspeksi. Sensitivitas, alarm palsu, biaya, dan ROI belum terukur.</Text>
+      </div>
+    </>
+  );
 };
 const Limits: Page = () => <Frame label="10 / Simulasi model dan kapasitas" title="Dari prediksi menjadi prioritas tinjauan" source="Replay test_alert_predictions.csv · ambang OOF terkunci · skenario berlabel"><ModelReplay /></Frame>;
 
