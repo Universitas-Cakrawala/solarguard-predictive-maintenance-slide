@@ -285,8 +285,32 @@ const ModelReplay = () => {
 const Limits: Page = () => <Frame label="10 / Simulasi model dan kapasitas" title="Dari prediksi menjadi prioritas tinjauan" source="Replay test_alert_predictions.csv · ambang OOF terkunci · skenario berlabel"><ModelReplay /></Frame>;
 
 const Close: Page = () => <Frame label="11 / Keputusan yang diminta" title="Persetujuan pilot Plant 1">
-  <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr', gap: 100, marginTop: 50 }}><div><div style={{ fontSize: 86, lineHeight: 1.08, letterSpacing: '-0.04em', fontWeight: 700 }}>Estimasi output.<br /><span style={{ color: amber }}>Tinjauan operator.</span><br />Bukti inspeksi.</div><Text size={32}>Mulai dengan plant yang memiliki hasil lebih kuat dan kumpulkan bukti manfaat operasional.</Text></div><div style={{ borderTop: `4px solid ${amber}`, paddingTop: 22 }}><Finding n="1" title="Tetapkan PIC dan akses data">Operations memimpin, tim data menjaga kualitas input.</Finding><Finding n="2" title="Sepakati indikator sebelum pilot">Cakupan data, waktu tinjauan, dan hasil inspeksi terkonfirmasi.</Finding><Finding n="3" title="Putuskan kelanjutan melalui review">Lanjutkan hanya bila manfaat dan beban kerja dapat dibuktikan.</Finding></div></div>
-  <div style={{ marginTop: 38, color: muted, fontSize: 26 }}>Diskusi · kesiapan data, kapasitas operator, dan kriteria evaluasi pilot</div>
+  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 80, marginTop: 28 }}>
+    <div>
+      <div style={{ fontSize: 72, lineHeight: 1.1, letterSpacing: '-0.035em', fontWeight: 700 }}>
+        Estimasi output.<br /><span style={{ color: amber }}>Tinjauan operator.</span><br />Bukti inspeksi.
+      </div>
+      <Text size={28}>Mulai dengan plant yang memiliki hasil lebih kuat dan kumpulkan bukti manfaat operasional.</Text>
+    </div>
+    <div style={{ borderTop: `4px solid ${amber}`, paddingTop: 14 }}>
+      <Finding n="1" title="Tetapkan PIC dan akses data">Operations memimpin, tim data menjaga kualitas input.</Finding>
+      <Finding n="2" title="Sepakati indikator sebelum pilot">Cakupan data, waktu tinjauan, dan hasil inspeksi terkonfirmasi.</Finding>
+      <Finding n="3" title="Putuskan kelanjutan melalui review">Lanjutkan hanya bila manfaat dan beban kerja dapat dibuktikan.</Finding>
+    </div>
+  </div>
+  <div style={{ marginTop: 24, padding: '18px 24px', background: '#E7F0E8', borderLeft: `5px solid ${blue}` }}>
+    <div style={{ fontSize: 22, fontWeight: 700, color: blue, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 6 }}>Closing Statement</div>
+    <div style={{ fontSize: 25, lineHeight: 1.38, color: '#12352B', fontStyle: 'italic' }}>
+      &ldquo;Model prediktif bukan pengganti keputusan manusia di lapangan, melainkan instrumen pembuktian berbasis data. Melalui pilot terukur di Plant 1, kita membuktikan efektivitas operasional sebelum melangkah ke skala penuh.&rdquo;
+    </div>
+  </div>
+  <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 21, color: muted, borderTop: `1px solid ${line}`, paddingTop: 12 }}>
+    <div><strong>Diskusi &amp; Q&amp;A</strong> · Kesiapan data, kapasitas operator, dan kriteria evaluasi pilot</div>
+    <div style={{ display: 'flex', gap: 28 }}>
+      <span>🌐 <a href="https://solarguard-slide-presentation.vercel.app/" target="_blank" rel="noreferrer" style={{ color: blue, textDecoration: 'none', fontWeight: 700 }}>solarguard-slide-presentation.vercel.app</a></span>
+      <span>📦 <a href="https://github.com/Universitas-Cakrawala/solarguard-predictive-maintenance" target="_blank" rel="noreferrer" style={{ color: blue, textDecoration: 'none', fontWeight: 700 }}>GitHub: solarguard-predictive-maintenance</a></span>
+    </div>
+  </div>
 </Frame>;
 
 // Manifest bukti: seluruh angka mengacu pada snapshot notebook 14 Oktober 2026.
@@ -306,5 +330,5 @@ export const notes: (string | undefined)[] = [
   `Farisyah · 50 detik. Permutation importance menghitung kenaikan MAE bila fitur diacak, pada sampel test tetap setelah seleksi. PLANT_ID besar karena beda skala, dan mengacaknya terpisah dari inverter menghasilkan kombinasi tak konsisten. Irradiation dan kuadratnya berbagi informasi. Nilai ini bukan persentase explained variance atau efek kausal. Residual lag satu sekitar 0,596 dan 0,771, sehingga galat berurutan berkorelasi. Sumber: permutation_importance.csv dan test_residual_autocorrelation.csv.`,
   `Titanio · 65 detik. Rekomendasi pertama pilot Plant 1 karena hasil regresi lebih kuat, dengan Operations Manager dan operator sebagai pemilik tindakan. Ukur cakupan, waktu review, dan hasil inspeksi terkonfirmasi. Kedua audit input Plant 2 bersama tim data dan operasi. Cakupan inverter terendah 72,15% merupakan cakupan interval pembangkitan, bukan ketersediaan semua sensor. Periksa output nol, timestamp, satuan, dan rating alat tanpa menetapkan penyebab. Tidak ada klaim biaya murah atau ROI. Sumber: evidence_action_matrix.csv, coverage_summary.csv, test_alert_workload.csv.`,
   `Farisyah · 80 detik. Slide ini mereplay tiga prediksi Random Forest yang benar-benar tersimpan di test_alert_predictions.csv. Default Plant 1 pada 14 Juni 11:00, 11:15, 11:30, inverter 1BY6WEcLGh8j5v7. Ketiga gap melampaui threshold 1576,996 dan prediksi memenuhi minimum 2208,361, sehingga terjadi satu episode tinjauan. Plant 2 memakai inverter 4UPUqMRk7TRMgml pada 12:45–13:15, threshold 917,431 dan minimum 140,594. Pilih Plant 2 lalu geser aktual ke 100% prediksi: gap menjadi nol, sehingga tidak memicu tinjauan. Ini what-if output aktual, bukan inferensi model ulang atau bukti respons cuaca kausal. Reset mengembalikan observasi asli. Slider waktu mengubah asumsi menit review; pada 15 menit, 3 episode Plant 1 membutuhkan 45 menit dan 10 episode Plant 2 membutuhkan 150 menit, belum termasuk inspeksi. Jumlah episode kapasitas adalah beban test tetap dan tidak berubah mengikuti slider output. Ambang memakai OOF dan tetap terkunci; label kerusakan tidak tersedia. Data 34 hari dan horizon 0 membatasi generalisasi. Sumber: test_alert_predictions.csv, development_alert_thresholds.csv, test_alert_workload.csv.`,
-  `Titanio · 30 detik. Kami meminta persetujuan pilot Plant 1, penetapan PIC serta akses sensor, dan indikator evaluasi sebelum pilot dimulai. Hasil regresi mendukung pengujian manfaat, sementara keputusan inspeksi tetap pada operator. Setelah ada log inspeksi dan waktu kerja, kelompok dapat menilai efektivitas dan biaya secara terukur. Tutup pada menit sebelas. Q&A lima menit terpisah. Kelompok 7 tampil urutan ketiga Meeting 15 dengan panel Kelompok 3, dan menjadi panel Kelompok 3 di Meeting 14. Sumber: notebook bagian 12–13 dan PLAN_SLIDE.md.`,
+  `Titanio · 35 detik. Kami meminta persetujuan pilot Plant 1, penetapan PIC serta akses sensor, dan indikator evaluasi sebelum pilot dimulai. Hasil regresi mendukung pengujian manfaat, sementara keputusan inspeksi tetap pada operator. Closing statement: Model prediktif bukan pengganti keputusan manusia di lapangan, melainkan instrumen pembuktian berbasis data. Melalui pilot terukur di Plant 1, kita membuktikan efektivitas operasional sebelum melangkah ke skala penuh. Tautan live demo dan repository GitHub tertera di bawah untuk pengujian panelis. Tutup tepat pada menit sebelas, dilanjutkan sesi Q&A 5 menit bersama Kelompok 3. Sumber: notebook bagian 12–13 dan PLAN_SLIDE.md.`,
 ];
