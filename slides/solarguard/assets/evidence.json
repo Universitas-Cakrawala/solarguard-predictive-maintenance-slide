@@ -1,0 +1,489 @@
+{
+  "snapshot": "18 Oktober 2026",
+  "notebook_sha256": "52453212aa0f06902a0d5c3e9bc22f3df866cd87e93889d8497973adb40d54c2",
+  "sources": {
+    "final_test_metrics.csv": "c2f745d161a42c55ef3d0a6b70aadc251d0057422a8448f797d346bb030b84bb",
+    "final_test_by_plant.csv": "adaeaae3bb550247c068ca0970015abd39b2560ca2eee7a4e31dcf54a87c2aa6",
+    "default_cv_ranking.csv": "681a3ea261520f876f2667c0d9c2436f68687b88dcc4dff52d1c77df8893ecd5",
+    "default_vs_tuned.csv": "737ff3e65c602e5db185c5f4321249922d19470cb1d08fae47f68dd8ceab89e9",
+    "permutation_importance.csv": "715532c1adfea0774cc441488cd0834ae61c27851fc7c29e34520509ad5e67d5",
+    "cv_folds.csv": "092f5508585d3d1512605477bdbf710b401d6f240f5e5b55f533ea96619ca4ca",
+    "test_alert_workload.csv": "733a87de2d1b3b011cc97b6fb099a5cefff151f59b04d5d741f648efbc1a0f58",
+    "development_alert_thresholds.csv": "c01edd2d4ef4f19552de1222e76b7e46b45920a9fa11e0be6bc6662f1fbdfa99",
+    "development_scale_audit.csv": "824cad845e68d8b37ad7ca398d755f0ee76ad31637e2142f69405e06cb8cdfc3",
+    "eda_irradiation_correlations.csv": "9d65b4083a2fbb13abeb2633336ccfbcdfbb12799a14511680f7ef4222e7b3cf",
+    "coverage_summary.csv": "b18c1f217d5d61fa407c5680e3cc84d2494c566151f02a32a522c9bd4bfd15d0",
+    "test_residual_autocorrelation.csv": "11e52791f3dddb7cbb8f24ee25b9922063204ac68ed3c8ddff55c0cb209b1aca",
+    "dataset_dimensions.csv": "689d7a70c4330877680794014aab4d78a0f720d81e1ed45cc4ded1a813f2c262",
+    "run_summary.json": "3bcd859c20f5291054c2cecfc5629568a867b13a16eb71e5090b86a93b10a96f",
+    "final_test_predictions.csv": "a10d9646c4de9a13d6369f17763d0353f643d5dd70fab7b30b906de6a07fb006",
+    "test_alert_predictions.csv": "0b8f6d8873f753e2184375652382478d75a58770e6c6d2c9f662e9553b772008",
+    "plant_mean_baseline_cv_folds.csv": "d82baf29daeaf3445040a06a5c16528231426f020007e314e6f7e718fa4cbfff"
+  },
+  "verification": {
+    "notebook_metrics_match_outputs": true,
+    "test_metrics_recomputed": true,
+    "replay_contiguous_three_intervals": true
+  },
+  "summary": {
+    "selected_model": "Random Forest [tuned]",
+    "test": [
+      {
+        "model": "Random Forest [tuned]",
+        "n": 16588,
+        "MAE": 196.01941911292587,
+        "RMSE": 502.77632154206964,
+        "R2": 0.9788511324953356,
+        "bias_actual_minus_pred": 36.59302381791791
+      },
+      {
+        "model": "Mean baseline",
+        "n": 16588,
+        "MAE": 3070.496241418311,
+        "RMSE": 3488.0082045721556,
+        "R2": -0.017870387077219663,
+        "bias_actual_minus_pred": -462.1662607773756
+      },
+      {
+        "model": "Plant mean baseline (supplemental)",
+        "n": 16588,
+        "MAE": 1661.9450614697753,
+        "RMSE": 2570.175910181001,
+        "R2": 0.4473334480102489,
+        "bias_actual_minus_pred": -396.2795096194771
+      }
+    ],
+    "test_MAE_reduction_vs_baseline_pct": 93.61603455269558,
+    "test_MAE_reduction_vs_plant_baseline_pct": 88.2054212466222,
+    "evaluation_status": "reproduction_after_test_exposure",
+    "statistical_reporting": {
+      "fold_weighting": "equal_folds",
+      "SD_ddof": 1,
+      "confidence_intervals_or_significance_claims": false
+    },
+    "rows_generation": 136476,
+    "rows_daytime": 77098,
+    "rows_development": 60510,
+    "rows_test": 16588,
+    "days_development": 27,
+    "days_test": 7,
+    "tuned_models": [
+      "Gradient Boosting",
+      "Random Forest"
+    ],
+    "run_seconds": 502.63755548100016,
+    "environment": {
+      "numpy": "2.5.2",
+      "pandas": "3.0.5",
+      "scikit-learn": "1.9.0",
+      "matplotlib": "3.11.1",
+      "seaborn": "0.13.2",
+      "scipy": "1.18.0",
+      "nbformat": "5.11.1",
+      "nbclient": "0.11.0",
+      "ipykernel": "7.3.0",
+      "threadpoolctl": "3.6.0"
+    },
+    "checks": {
+      "four exact CSV files loaded": true,
+      "minimum tabular size and predictors": true,
+      "no target/proxy in features": true,
+      "no join multiplication": true,
+      "strict chronological holdout": true,
+      "five grouped-date folds": true,
+      "all required model families": true,
+      "two strongest non-baseline tuned": true,
+      "at least two tuning parameters each": true,
+      "test predictions finite": true,
+      "three findings and two recommendations": true,
+      "thresholds locked from development": true,
+      "per-plant test reporting": true,
+      "supplemental baseline on identical five folds": true,
+      "consistent sample SD for tuning comparison": true,
+      "supplemental baseline excluded from model selection": true
+    },
+    "utc_completed": "2026-10-18T03:19:16.602484+00:00"
+  },
+  "test": [
+    {
+      "model": "Random Forest [tuned]",
+      "n": 16588,
+      "MAE": 196.01941911292587,
+      "RMSE": 502.7763215420696,
+      "R2": 0.9788511324953356,
+      "bias_actual_minus_pred": 36.59302381791791
+    },
+    {
+      "model": "Mean baseline",
+      "n": 16588,
+      "MAE": 3070.496241418311,
+      "RMSE": 3488.008204572156,
+      "R2": -0.0178703870772196,
+      "bias_actual_minus_pred": -462.1662607773756
+    },
+    {
+      "model": "Plant mean baseline (supplemental)",
+      "n": 16588,
+      "MAE": 1661.9450614697753,
+      "RMSE": 2570.175910181001,
+      "R2": 0.4473334480102489,
+      "bias_actual_minus_pred": -396.2795096194771
+    }
+  ],
+  "plants": [
+    {
+      "plant": 4135001,
+      "days": 7,
+      "n": 8096,
+      "MAE": 291.8232864439573,
+      "RMSE": 678.5606008990635,
+      "R2": 0.9643961068168074,
+      "bias_actual_minus_pred": 84.34816490933194,
+      "MAE_over_development_mean": 0.0504114195625215
+    },
+    {
+      "plant": 4136001,
+      "days": 7,
+      "n": 8492,
+      "MAE": 104.6830896367094,
+      "RMSE": 234.1094152076616,
+      "R2": 0.3902566863345261,
+      "bias_actual_minus_pred": -8.93519359565817,
+      "MAE_over_development_mean": 0.2307548924285109
+    }
+  ],
+  "cv": [
+    {
+      "model": "Gradient Boosting",
+      "CV_MAE": 294.0030382090719,
+      "CV_MAE_SD": 28.86552516630324,
+      "CV_RMSE": 572.0355769992282,
+      "CV_R2": 0.9777234723738364,
+      "total_fit_seconds": 45.031780573000106
+    },
+    {
+      "model": "Random Forest",
+      "CV_MAE": 294.84444420518366,
+      "CV_MAE_SD": 35.63605072469643,
+      "CV_RMSE": 602.3319112034033,
+      "CV_R2": 0.9756056779760424,
+      "total_fit_seconds": 25.338617141999748
+    },
+    {
+      "model": "Linear Regression",
+      "CV_MAE": 1559.4730345522398,
+      "CV_MAE_SD": 106.4611703755678,
+      "CV_RMSE": 1860.7582106256748,
+      "CV_R2": 0.7745523437723291,
+      "total_fit_seconds": 0.603505099999893
+    },
+    {
+      "model": "Ridge",
+      "CV_MAE": 1559.9166245064175,
+      "CV_MAE_SD": 106.7307278954247,
+      "CV_RMSE": 1861.0094089467557,
+      "CV_R2": 0.7744905188388714,
+      "total_fit_seconds": 0.3907574339996245
+    },
+    {
+      "model": "Mean baseline",
+      "CV_MAE": 3349.277728091357,
+      "CV_MAE_SD": 157.84198232524653,
+      "CV_RMSE": 3964.284012939324,
+      "CV_R2": -0.0142410956528542,
+      "total_fit_seconds": 0.2397719809996488
+    }
+  ],
+  "tuning": [
+    {
+      "model": "Gradient Boosting",
+      "configurations": 4,
+      "folds": 5,
+      "default_CV_MAE": 294.0030382090719,
+      "tuned_CV_MAE": 354.04930441889326,
+      "tuned_CV_MAE_SD": 27.95687428636136,
+      "SD_ddof": 1,
+      "tuned_CV_RMSE": 626.1735317763462,
+      "tuned_CV_R2": 0.973487810981774,
+      "MAE_improvement": -60.04626620982134,
+      "improvement_pct": -20.42368901205747,
+      "search_seconds": 314.4696661919997,
+      "best_parameters": "{\"model__subsample\": 1.0, \"model__n_estimators\": 300, \"model__min_samples_leaf\": 4, \"model__max_depth\": 2, \"model__learning_rate\": 0.1}"
+    },
+    {
+      "model": "Random Forest",
+      "configurations": 4,
+      "folds": 5,
+      "default_CV_MAE": 294.84444420518366,
+      "tuned_CV_MAE": 290.6200656839228,
+      "tuned_CV_MAE_SD": 34.59166782979472,
+      "SD_ddof": 1,
+      "tuned_CV_RMSE": 591.7519848756294,
+      "tuned_CV_R2": 0.9763751469215616,
+      "MAE_improvement": 4.22437852126086,
+      "improvement_pct": 1.4327482183524187,
+      "search_seconds": 70.29819356200005,
+      "best_parameters": "{\"model__n_estimators\": 100, \"model__min_samples_leaf\": 2, \"model__max_features\": 1.0, \"model__max_depth\": 20}"
+    }
+  ],
+  "importance": [
+    {
+      "feature": "PLANT_ID",
+      "MAE_increase_mean": 1999.717845227245,
+      "permutation_SD": 29.55404475395636
+    },
+    {
+      "feature": "IRRADIATION",
+      "MAE_increase_mean": 916.3709725747748,
+      "permutation_SD": 17.49276008147968
+    },
+    {
+      "feature": "IRR_SQUARED",
+      "MAE_increase_mean": 783.1819425205462,
+      "permutation_SD": 12.869974393137444
+    },
+    {
+      "feature": "HOUR_SIN",
+      "MAE_increase_mean": 15.800186198288625,
+      "permutation_SD": 2.034726122052137
+    },
+    {
+      "feature": "IRR_TEMP_INTERACTION",
+      "MAE_increase_mean": 14.598805675188828,
+      "permutation_SD": 0.6938131739773525
+    },
+    {
+      "feature": "TEMP_GAP",
+      "MAE_increase_mean": 8.640487387485564,
+      "permutation_SD": 0.7554533562154327
+    },
+    {
+      "feature": "INVERTER_ID",
+      "MAE_increase_mean": 6.496846044724805,
+      "permutation_SD": 2.4789603075397983
+    },
+    {
+      "feature": "HOUR_COS",
+      "MAE_increase_mean": 5.978265653882545,
+      "permutation_SD": 0.2531390834552185
+    },
+    {
+      "feature": "MODULE_TEMPERATURE",
+      "MAE_increase_mean": 0.9924868567232806,
+      "permutation_SD": 0.3313213701664502
+    },
+    {
+      "feature": "AMBIENT_TEMPERATURE",
+      "MAE_increase_mean": -2.354723928594729,
+      "permutation_SD": 0.3581911122366051
+    }
+  ],
+  "folds": [
+    {
+      "fold": 1,
+      "train_start": "2020-05-15",
+      "train_end": "2020-05-21",
+      "validation_start": "2020-05-22",
+      "validation_end": "2020-05-25",
+      "train_days": 7,
+      "validation_days": 4,
+      "train_rows": 15475,
+      "validation_rows": 8346,
+      "train_plants": 2,
+      "validation_plants": 2,
+      "train_inverters": 44,
+      "validation_inverters": 40
+    },
+    {
+      "fold": 2,
+      "train_start": "2020-05-15",
+      "train_end": "2020-05-25",
+      "validation_start": "2020-05-26",
+      "validation_end": "2020-05-29",
+      "train_days": 11,
+      "validation_days": 4,
+      "train_rows": 23821,
+      "validation_rows": 8453,
+      "train_plants": 2,
+      "validation_plants": 2,
+      "train_inverters": 44,
+      "validation_inverters": 44
+    },
+    {
+      "fold": 3,
+      "train_start": "2020-05-15",
+      "train_end": "2020-05-29",
+      "validation_start": "2020-05-30",
+      "validation_end": "2020-06-02",
+      "train_days": 15,
+      "validation_days": 4,
+      "train_rows": 32274,
+      "validation_rows": 9392,
+      "train_plants": 2,
+      "validation_plants": 2,
+      "train_inverters": 44,
+      "validation_inverters": 44
+    },
+    {
+      "fold": 4,
+      "train_start": "2020-05-15",
+      "train_end": "2020-06-02",
+      "validation_start": "2020-06-03",
+      "validation_end": "2020-06-06",
+      "train_days": 19,
+      "validation_days": 4,
+      "train_rows": 41666,
+      "validation_rows": 9274,
+      "train_plants": 2,
+      "validation_plants": 2,
+      "train_inverters": 44,
+      "validation_inverters": 44
+    },
+    {
+      "fold": 5,
+      "train_start": "2020-05-15",
+      "train_end": "2020-06-06",
+      "validation_start": "2020-06-07",
+      "validation_end": "2020-06-10",
+      "train_days": 23,
+      "validation_days": 4,
+      "train_rows": 50940,
+      "validation_rows": 9570,
+      "train_plants": 2,
+      "validation_plants": 2,
+      "train_inverters": 44,
+      "validation_inverters": 44
+    }
+  ],
+  "scale": [
+    {
+      "PLANT_ID": 4135001,
+      "n": 30280,
+      "mean_dc": 5788.832946511862,
+      "median_dc": 5850.1339285,
+      "max_dc": 14413.42857,
+      "mean_ac": 566.0425829085523,
+      "daytime_zero": 1161,
+      "median_DC_AC_ratio": 10.221928819279151
+    },
+    {
+      "PLANT_ID": 4136001,
+      "n": 30230,
+      "mean_dc": 453.6549086132194,
+      "median_dc": 365.1766666666667,
+      "max_dc": 1420.9333333333332,
+      "mean_ac": 443.5688571177692,
+      "daytime_zero": 5642,
+      "median_DC_AC_ratio": 1.022427414563694
+    }
+  ],
+  "correlation": [
+    {
+      "plant": 4135001,
+      "irradiation_DC_corr": 0.9803949074161352
+    },
+    {
+      "plant": 4136001,
+      "irradiation_DC_corr": 0.6470883766798846
+    }
+  ],
+  "coverage": [
+    {
+      "file": "Plant_1_Generation_Data.csv",
+      "absent_intervals": 3026,
+      "min_coverage_pct": 95.21472392638036,
+      "mean_coverage_pct": 95.78571828898876
+    },
+    {
+      "file": "Plant_1_Weather_Sensor_Data.csv",
+      "absent_intervals": 82,
+      "min_coverage_pct": 97.4877450980392,
+      "mean_coverage_pct": 97.4877450980392
+    },
+    {
+      "file": "Plant_2_Generation_Data.csv",
+      "absent_intervals": 4110,
+      "min_coverage_pct": 72.15073529411765,
+      "mean_coverage_pct": 94.2764037433155
+    },
+    {
+      "file": "Plant_2_Weather_Sensor_Data.csv",
+      "absent_intervals": 5,
+      "min_coverage_pct": 99.8468137254902,
+      "mean_coverage_pct": 99.8468137254902
+    }
+  ],
+  "residual": [
+    {
+      "plant": 4135001,
+      "contiguous_pairs": 7920,
+      "pooled_within_inverter_lag1_corr": 0.595622742090622
+    },
+    {
+      "plant": 4136001,
+      "contiguous_pairs": 8184,
+      "pooled_within_inverter_lag1_corr": 0.770790551825192
+    }
+  ],
+  "replay": {
+    "p1": {
+      "plant": "Plant 1",
+      "plant_id": 4135001,
+      "inverter": "1BY6WEcLGh8j5v7",
+      "date": "2020-06-14",
+      "threshold": 1576.9961615195143,
+      "minimum": 2208.3609225845125,
+      "episodes": 3,
+      "rows": [
+        {
+          "time": "11:00",
+          "actual": 2155.375,
+          "predicted": 8707.52723199693,
+          "irradiation": 0.6406613233333333
+        },
+        {
+          "time": "11:15",
+          "actual": 0.0,
+          "predicted": 8881.099978407128,
+          "irradiation": 0.6502135673333332
+        },
+        {
+          "time": "11:30",
+          "actual": 0.0,
+          "predicted": 8811.445692359048,
+          "irradiation": 0.6621523706666665
+        }
+      ]
+    },
+    "p2": {
+      "plant": "Plant 2",
+      "plant_id": 4136001,
+      "inverter": "4UPUqMRk7TRMgml",
+      "date": "2020-06-14",
+      "threshold": 917.4306655689728,
+      "minimum": 140.59358357772402,
+      "episodes": 10,
+      "rows": [
+        {
+          "time": "12:45",
+          "actual": 0.0,
+          "predicted": 930.46169588139,
+          "irradiation": 0.8849503783333332
+        },
+        {
+          "time": "13:00",
+          "actual": 0.0,
+          "predicted": 937.8840221185548,
+          "irradiation": 0.9029522003448276
+        },
+        {
+          "time": "13:15",
+          "actual": 0.0,
+          "predicted": 930.6233292742096,
+          "irradiation": 0.8873814986666667
+        }
+      ]
+    }
+  },
+  "plant_baseline_cv_mae": 1963.4933263943826
+}
